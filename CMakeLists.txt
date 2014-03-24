@@ -39,8 +39,8 @@ if (APPLE)
 elseif (UNIX)
     #set(BOOST_ROOT "E:/workspace/ar2externals/Boost/win64/release-V1.49.0-VC2010" CACHE TYPE STRING)
     #set(VTK_DIR "D:/workspace/VTK-master/build" CACHE TYPE STRING)
-    set(AR2GEMS_SOURCE_PATH "/home/balda/workspace/freelancejob/AlexSanto/ar2gems" CACHE TYPE STRING)
-    set(AR2GEMS_BUILD_PATH "/home/balda/workspace/freelancejob/AlexSanto/ar2gems_build" CACHE TYPE STRING)
+    set(AR2GEMS_SOURCE_PATH "/home/balda/workspace/freelancejob/AlexSanto/ar2gems/ar2gems" CACHE TYPE STRING)
+    set(AR2GEMS_BUILD_PATH  "/home/balda/workspace/freelancejob/AlexSanto/ar2gems/ar2gems_build" CACHE TYPE STRING)
 elseif (WIN32)
     set(BOOST_ROOT "d:/release-V1.49.0-VC2010" CACHE TYPE STRING)
     set(VTK_DIR "D:/workspace/VTK-master/build" CACHE TYPE STRING)
@@ -71,9 +71,10 @@ if (APPLE)
      # ...
 elseif (UNIX)
     set(INSTALL_LIB_DIR "/usr/bin/plugins/designer")
+    SET(INSTALL_GEOSTAT_LIB_DIR "/usr/bin/plugins/Geostat")  
 elseif (WIN32)
     SET(INSTALL_LIB_DIR         "../../../../plugins/designer") # don't set ABS path it will fail at stage of package creation (ABS path forbiden)
-    SET(INSTALL_GEOSTAT_LIB_DIR "../../../../plugins/Geostat") # don't set ABS path it will fail at stage of package creation (ABS path forbiden)
+    SET(INSTALL_GEOSTAT_LIB_DIR "../../../../plugins/Geostat")  # don't set ABS path it will fail at stage of package creation (ABS path forbiden)
     
     SET(PACKAGE_DIR         "../../../plugins/") # don't set ABS path it will fail at stage of package creation (ABS path forbiden)
 endif (APPLE)
@@ -136,9 +137,10 @@ include_directories()
 
 
 ### Enabling Boost ###################################################
-FIND_PACKAGE(Boost REQUIRED )
-# Uncomment if Boost isn't in your path:
-set(Boost_NO_SYSTEM_PATHS TRUE)
+if(WIN32)
+    set(Boost_NO_SYSTEM_PATHS TRUE)
+endif()
+
 FIND_PACKAGE( Boost REQUIRED )
 if(Boost_FOUND)
   message(STATUS "Boost found in ${BOOST_ROOT}")
@@ -158,12 +160,37 @@ elseif(MSVC)
   # customize flags for Visual Studio
 endif()
 
-### Enabling Qt4 #####################################################
-find_package(Qt4 REQUIRED COMPONENTS
-             QtCore QtGui QtXml QtSvg QtDesigner QtUiTools)
-if(QT4_FOUND)
-  message(STATUS "Qt4 found in ${QT_INCLUDE_DIR}")
-  include(${QT_USE_FILE})
+
+set(USE_QT5 1)
+if(USE_QT5)
+    ### Enabling Qt5 #####################################################
+    find_package(Qt5Core REQUIRED)
+    include_directories(${Qt5Core_INCLUDE_DIRS})
+    find_package(Qt5Gui REQUIRED)
+    include_directories(${Qt5Gui_INCLUDE_DIRS})
+    find_package(Qt5Xml REQUIRED)
+    include_directories(${Qt5Xml_INCLUDE_DIRS})
+    find_package(Qt5Svg REQUIRED)
+    include_directories(${Qt5Svg_INCLUDE_DIRS})
+    find_package(Qt5Designer REQUIRED)
+    include_directories(${Qt5Designer_INCLUDE_DIRS})
+    find_package(Qt5Widgets REQUIRED)
+    include_directories(${Qt5Widgets_INCLUDE_DIRS})
+    find_package(Qt5PrintSupport REQUIRED)
+    include_directories(${Qt5PrintSupport_INCLUDE_DIRS})
+    find_package(Qt5Multimedia REQUIRED)
+    include_directories(${Qt5Multimedia_INCLUDE_DIRS})
+    find_package(Qt5UiTools REQUIRED)
+    include_directories(${Qt5UiTools_INCLUDE_DIRS})
+
+elseif()
+    #### Enabling Qt4 #####################################################
+    #find_package(Qt4 REQUIRED COMPONENTS
+                 #QtCore QtGui QtXml QtSvg QtDesigner QtUiTools)
+    #if(QT4_FOUND)
+      #message(STATUS "Qt4 found in ${QT_INCLUDE_DIR}")
+      #include(${QT_USE_FILE})
+    #endif()
 endif()
 
 ### Enabling VTK #####################################################
@@ -198,7 +225,7 @@ endif()
 
 
 # Process all headers with Q_OBJECT
-QT4_WRAP_CPP(${PROJECT_NAME}_MOC
+QT5_WRAP_CPP(${PROJECT_NAME}_MOC
   pie_chart_creator.h
   pie_chart.h
 )
@@ -222,9 +249,21 @@ add_library(${PROJECT_NAME} SHARED
 )
 
 target_link_libraries(${PROJECT_NAME}
-  ${AR2GEMS_LIBRARIES}
-  ${QT_LIBRARIES}
-  ${VTK_LIBRARIES}
+    ${AR2GEMS_LIBRARIES}
+    #${QT_LIBRARIES}
+    ${Qt5Core_LIBRARIES}
+    ${Qt5Gui_LIBRARIES}
+    ${Qt5Gui_LIBRARIES}
+    ${Qt5Xml_LIBRARIES}
+    ${Qt5Svg_LIBRARIES}
+    ${Qt5Designer_LIBRARIES}
+    ${Qt5Widgets_LIBRARIES}
+    ${Qt5PrintSupport_LIBRARIES}
+    ${Qt5Multimedia_LIBRARIES}
+    ${Qt5UiTools_LIBRARIES}
+
+
+    ${VTK_LIBRARIES}
 )
 
 source_group(Qt FILES ${${PROJECT_NAME}_MOC} )

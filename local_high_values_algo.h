@@ -26,7 +26,10 @@ public:
 	  static Named_interface* create_new_interface( std::string& );
 
 private :
-    
+      virtual bool initialize( const Parameters_handler* parameters,
+                   Error_messages_handler* errors, Progress_notifier* notifier) {}
+      virtual int execute( GsTL_project* proj, Progress_notifier* notifier) {}
+
   float threshold_;
   Grid_continuous_property* prop_;
   Geostat_grid* grid_;
