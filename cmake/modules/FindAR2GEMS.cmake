@@ -15,7 +15,7 @@
 include (FindPackageHandleStandardArgs)
 include (FindPackageMessage)
 
-set (FINDAR2GEMS_DEBUG FALSE)  # print debug info
+set (PRINT_FINDAR2GEMS_DEBUG FALSE)  # print debug info
 
 set (AR2GEMS_ALL_RELEASE_LIBS_FOUND TRUE) # internal flag to check if all required libs are found, if atleast one missing this flag set to FALSE
 set (AR2GEMS_ALL_DEBUG_LIBS_FOUND TRUE) # internal flag to check if all required libs are found, if atleast one missing this flag set to FALSE
@@ -78,15 +78,29 @@ ${AR2GEMS_WINREGISTRY_PATH}/include/
 MACRO(FindAR2GEMS AR2GEMS_COMPONENTS)
     set(LIB_PREFIX "ar2gems_")
 
+    set(_REQUEST_HAS_GUI_LIB  FALSE) 
+    set(_REQUEST_HAS_CORE_LIB FALSE)
+
     foreach(COMPONENT ${AR2GEMS_COMPONENTS})
+        string(FIND "${COMPONENT}" "core" RES_CORE)
+        if (${RES_CORE} EQUAL -1)
+            set(_REQUEST_HAS_GUI_LIB TRUE)
+        else ()
+            set(_REQUEST_HAS_CORE_LIB TRUE)
+        endif ()
+
         list(APPEND AR2GEMS_LIBNAMES_RELEASE ${LIB_PREFIX}${COMPONENT}) 
     endforeach()
     
+    if (${_REQUEST_HAS_GUI_LIB} AND ${_REQUEST_HAS_CORE_LIB})
+        message (FATAL_ERROR "You are trying to use CORE and GUI libraries together, however this is not allowed. If at least one GUI lib is required to be used, then all COREs libs must be disabled and GUIs equivalent of libraries must be used instead. Note: GUI libraries already include the core functionality" )
+    endif ()
+
     foreach(AR2GEMS_LIBNAME ${AR2GEMS_LIBNAMES_RELEASE})
         list(APPEND AR2GEMS_LIBNAMES_DEBUG ${AR2GEMS_LIBNAME}_d) 
     endforeach()
 
-    if (FINDAR2GEMS_DEBUG)
+    if (PRINT_FINDAR2GEMS_DEBUG)
         message(STATUS "AR2GEMS path: ${AR2GEMS_PATH}")
         message(STATUS "AR2GEMS winregistry path: ${AR2GEMS_WINREGISTRY_PATH}")
     endif ()
@@ -96,13 +110,13 @@ MACRO(FindAR2GEMS AR2GEMS_COMPONENTS)
         DOC "The directory where ar2gems/sgems_version.h resides")
     list(APPEND AR2GEMS_INCLUDE_DIRS ${AR2GEMS_INCLUDE_DIR})
                   
-    if (FINDAR2GEMS_DEBUG)
+    if (PRINT_FINDAR2GEMS_DEBUG)
         message("includes: ${AR2GEMS_INCLUDE_DIRS}")
-    endif(FINDAR2GEMS_DEBUG)
+    endif(PRINT_FINDAR2GEMS_DEBUG)
      
     # search RELEASE                   
     foreach(RELEASE_LIB ${AR2GEMS_LIBNAMES_RELEASE})
-        if (FINDAR2GEMS_DEBUG)
+        if (PRINT_FINDAR2GEMS_DEBUG)
             message("Searching release lib: ${RELEASE_LIB}")
         endif()
         
@@ -121,7 +135,7 @@ MACRO(FindAR2GEMS AR2GEMS_COMPONENTS)
 
     # search DEBUG  
     foreach(DEBUG_LIB ${AR2GEMS_LIBNAMES_DEBUG})
-        if (FINDAR2GEMS_DEBUG)
+        if (PRINT_FINDAR2GEMS_DEBUG)
             message("Searching debug lib: ${DEBUG_LIB}")
         endif()
         
@@ -140,7 +154,10 @@ MACRO(FindAR2GEMS AR2GEMS_COMPONENTS)
         
     if(AR2GEMS_INCLUDE_DIRS AND AR2GEMS_ALL_RELEASE_LIBS_FOUND)
         set(AR2GEMS_RELEASE_FOUND TRUE)
-        message(STATUS "Found Release AR2GEMS library ${AR2GEMS_RELEASE_LIBRARIES}")
+        message(STATUS "Found Release AR2GEMS libraries:")
+        foreach (_lib ${AR2GEMS_RELEASE_LIBRARIES})
+            message(${_lib})
+        endforeach ()
         message(STATUS "Found Release AR2GEMS includes ${AR2GEMS_INCLUDE_DIRS}")
     else()
         set(AR2GEMS_RELEASE_FOUND FALSE)
@@ -149,7 +166,10 @@ MACRO(FindAR2GEMS AR2GEMS_COMPONENTS)
 
     if(AR2GEMS_INCLUDE_DIRS AND AR2GEMS_ALL_DEBUG_LIBS_FOUND)
         set(AR2GEMS_DEBUG_FOUND TRUE)
-        message(STATUS "Found Debug AR2GEMS library ${AR2GEMS_DEBUG_LIBRARIES}")
+        message(STATUS "Found Debug AR2GEMS libraries:")
+        foreach (_lib ${AR2GEMS_DEBUG_LIBRARIES})
+            message(${_lib})
+        endforeach ()
         message(STATUS "Found Debug AR2GEMS includes ${AR2GEMS_INCLUDE_DIRS}")
     else()    
         set(AR2GEMS_DEBUG_FOUND FALSE)
@@ -160,6 +180,7 @@ MACRO(FindAR2GEMS AR2GEMS_COMPONENTS)
 		set(AR2GEMS_FOUND TRUE)
 	else()
 		set(AR2GEMS_FOUND FALSE)
+        message(FATAL_ERROR "ar2gems not found")
 	endif()	
 
 ENDMACRO()
