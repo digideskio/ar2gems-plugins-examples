@@ -1,5 +1,6 @@
 #include "common.h"
 #include "add_property_action.h"
+#include "max_property_action.h"
 #include "multiply_property_action.h"
 #include "local_high_values_algo.h"
 #include "pie_chart_creator.h"
@@ -21,6 +22,7 @@ extern "C" PLUGIN_DEMOS_DECL int plugin_init() {
   
   dir->factory( "AddProperties", Add_property::create_new_interface );
   dir->factory( "MultiplyProperties", Multiply_property::create_new_interface );
+  dir->factory( "MaxProperties", Max_property::create_new_interface );
 
   // Register algo
   ni = Root::instance()->interface( geostatAlgo_manager );

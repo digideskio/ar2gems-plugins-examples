@@ -154,6 +154,8 @@ endif()
 
 # Process all headers with Q_OBJECT
 QT4_WRAP_CPP(${PROJECT_NAME}_MOC
+  blending_time_series_chart_creator.h
+  blending_time_series_chart.h
   pie_chart_creator.h
   pie_chart.h
 )
@@ -162,8 +164,14 @@ QT4_WRAP_CPP(${PROJECT_NAME}_MOC
 add_library(${PROJECT_NAME} SHARED
   add_property_action.cpp
   add_property_action.h
+  blending_time_series_chart.cpp
+  blending_time_series_chart.h
+  blending_time_series_chart_creator.cpp
+  blending_time_series_chart_creator.h
   multiply_property_action.cpp
   multiply_property_action.h
+  max_property_action.cpp
+  max_property_action.h 
   pie_chart_creator.cpp
   pie_chart_creator.h
   pie_chart.cpp

@@ -1,15 +1,15 @@
-#include "multiply_property_action.h"
+#include "max_property_action.h"
 
 #include <utils/string_manipulation.h>
 #include <grid/utilities.h>
 
-Named_interface* Multiply_property::create_new_interface( std::string& ){
-  return new Multiply_property;
+Named_interface* Max_property::create_new_interface( std::string& ){
+  return new Max_property;
 }
 
 
 // format gridName::NewNameSum::prop1::prop2[::prop3::propN]
-bool Multiply_property::init( std::string& parameters, GsTL_project* proj,
+bool Max_property::init( std::string& parameters, GsTL_project* proj,
                      Error_messages_handler* errors )
 {
 
@@ -34,8 +34,8 @@ bool Multiply_property::init( std::string& parameters, GsTL_project* proj,
     return false;
   }
 
-	std::string product_prop_name = params[1];
-  if(product_prop_name.empty()) errors->report( "No new property name was defined" );
+	std::string sum_prop_name = params[1];
+  if(sum_prop_name.empty()) errors->report( "No new property name was defined" );
 
   std::vector<Grid_continuous_property*> props;
 
@@ -49,9 +49,9 @@ bool Multiply_property::init( std::string& parameters, GsTL_project* proj,
     props_.push_back(prop);
   }
 
-  product_prop_ = grid_->add_property(product_prop_name);
-  if(product_prop_ == 0) {
-    errors->report( "Could not create the property "+product_prop_name );
+  max_prop_ = grid_->add_property(sum_prop_name);
+  if(max_prop_ == 0) {
+    errors->report( "Could not create the property "+sum_prop_name );
     return false;
   }
 
@@ -59,10 +59,10 @@ bool Multiply_property::init( std::string& parameters, GsTL_project* proj,
 }
 
 
-bool Multiply_property::exec(){
+bool Max_property::exec(){
 
   for(int i=0; i<props_[0]->size(); ++i) {
-    float prod = 1.0;
+    float current_max = -9e10;
     bool ok = true;
     for(int p=0; p<props_.size(); ++p) {
       
@@ -70,10 +70,10 @@ bool Multiply_property::exec(){
         ok = false;
         break;
       }
-      prod *= props_[p]->get_value(i);
+	  if(current_max < props_[p]->get_value(i)) current_max = props_[p]->get_value(i);
     }
 
-    if(ok) product_prop_->set_value(prod,i);
+    if(ok) max_prop_->set_value(current_max,i);
   }
 
   return true;
