@@ -1,6 +1,7 @@
 # This module will first look into the directories defined by the variables:
-# 1) AR2GEMS_SOURCE_PATH and AR2GEMS_BUILD_PATH 
-# 2) windows ar2gems location  in registry
+# 1) AR2GEMS_DEVKIT_PATH
+# 2) AR2GEMS_SOURCE_PATH and AR2GEMS_BUILD_PATH 
+# 3) windows ar2gems location in registry
 # 
 # AR2GEMS_LIBRARIES    - ar2gems libraries to link
 # AR2GEMS_INCLUDE_DIRS - The AR2GEMS include directories
@@ -41,6 +42,7 @@ elseif (WIN32)
 endif (APPLE)
 
 set(LIB_RELEASE_SEARCH_PATHES
+${AR2GEMS_DEVKIT_PATH}/lib
 ${AR2GEMS_BUILD_PATH}/Release/lib # UNIX
 ${AR2GEMS_BUILD_PATH}/lib/Release # VS2010
 ${AR2GEMS_WINREGISTRY_PATH}
@@ -53,6 +55,7 @@ ${AR2GEMS_WINREGISTRY_PATH}
 )
 
 set(LIB_DEBUG_SEARCH_PATHES
+${AR2GEMS_DEVKIT_PATH}/lib
 ${AR2GEMS_BUILD_PATH}/Debug/lib # UNIX
 ${AR2GEMS_BUILD_PATH}/lib/Debug # VS2010
 ${AR2GEMS_WINREGISTRY_PATH}
@@ -65,6 +68,7 @@ ${AR2GEMS_WINREGISTRY_PATH}
 )
 
 set(HEADER_SEARCH_PATHES
+${AR2GEMS_DEVKIT_PATH}/include
 ${AR2GEMS_SOURCE_PATH}/
 ${AR2GEMS_PATH}/include/
 ${AR2GEMS_WINREGISTRY_PATH}/include/
@@ -101,7 +105,9 @@ MACRO(FindAR2GEMS AR2GEMS_COMPONENTS)
     endforeach()
 
     if (PRINT_FINDAR2GEMS_DEBUG)
-        message(STATUS "AR2GEMS path: ${AR2GEMS_PATH}")
+        message(STATUS "AR2GEMS DEVKIT path: ${AR2GEMS_DEVKIT_PATH}")
+        message(STATUS "AR2GEMS SOURCE path: ${AR2GEMS_SOURCE_PATH}")
+        message(STATUS "AR2GEMS BUILD path: ${AR2GEMS_BUILD_PATH}")
         message(STATUS "AR2GEMS winregistry path: ${AR2GEMS_WINREGISTRY_PATH}")
     endif ()
     

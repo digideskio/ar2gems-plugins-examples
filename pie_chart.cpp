@@ -189,8 +189,8 @@ void Categorical_property_pie_chart::build_plot()
    int ncat = cat_prop_->get_number_of_category();
    const CategoricalPropertyDefinition* cdef = cat_prop_->get_category_definition();
    for(int i=0; i<ncat; ++i) {
-     QColor color = cdef->color_from_index(i);
-     vtkColor3ub vtk_color( color.red(), color.green(), color.blue() );
+     Color color = cdef->color_from_index(i);
+     vtkColor3ub vtk_color( color.redF()*255.0f, color.greenF()*255.0f, color.blueF()*255.0f );
      color_series->AddColor(vtk_color);
    }
 
