@@ -1,6 +1,7 @@
 #include "common.h"
 #include "add_property_action.h"
 #include "local_high_values_algo.h"
+#include "distance_from_point.h"
 #include <GsTL/utils/smartptr.h>
 #include <utils/gstl_messages.h>
 #include <utils/manager_repository.h>
@@ -27,6 +28,7 @@ extern "C" PLUGIN_DEMOS_DECL int plugin_init() {
     return 1;
   }
   dir->factory( Local_high_values().name(), Local_high_values::create_new_interface );
+  dir->factory(Distance_from_point().name(), Distance_from_point::create_new_interface);
 
 
   return 0;

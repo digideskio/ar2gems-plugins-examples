@@ -29,16 +29,17 @@ Named_interface* Distance_from_point::create_new_interface( std::string& ) {
 bool Distance_from_point::initialize( const Parameters_handler* parameters,
   Error_messages_handler* errors, Progress_notifier* notifier) {
 
-	std::string grid_name = parameters->value( "Data_selector.grid" );
+	std::string grid_name = parameters->value( "Grid_Name.value" );
 	errors->report( grid_name.empty(),
-		  "Data_selector", "No grid selected" );
+		  "Grid_Name", "No grid selected" );
 
-  std::string region_name = parameters->value("Data_selector.region");
+  std::string region_name = parameters->value("Grid_Name.region");
 
 
-  out_name_ = parameters->value( "output.value" );
+  out_name_ = parameters->value( "Output_name.value" );
 	errors->report( out_name_.empty(),
-		  "output", "No property name specified" );
+		  "Output_name", "No property name specified" );
+  is_using_existing_prop_ = parameters->value("Output_name.reuse_property") == "1";
 
   grid_ = grid_utilities::get_grid_from_manager(grid_name);
   if (grid_ == 0) {
@@ -59,6 +60,8 @@ bool Distance_from_point::initialize( const Parameters_handler* parameters,
   point_.y() = String_Op::to_number<double>(parameters->value("Point.y"));
   point_.z() = String_Op::to_number<double>(parameters->value("Point.z"));
 
+  nb_threads_ = geostat_utils::initialize_nb_processors("Nb_processors", parameters, errors);
+
   if(!errors->empty()) {
     return false;
   }
@@ -70,14 +73,14 @@ bool Distance_from_point::initialize( const Parameters_handler* parameters,
 
 int Distance_from_point::execute(GsTL_project* proj, Progress_notifier* notifier){
 
-  Grid_continuous_property* count_prop = grid_utilities::add_property_to_grid(grid_, out_name_);
+  Grid_continuous_property* count_prop = grid_utilities::get_continous_property(grid_, out_name_, is_using_existing_prop_);
 
 
   int grid_size = grid_->size();
 
   Property_data_lock_guard lock(count_prop);
 
-  #pragma omp parallel for
+  #pragma omp parallel for num_threads(nb_threads_)
   for(int i=0; i< grid_size; ++i) {
 
     if (target_region_ && !target_region_->is_inside_region(i)) continue;

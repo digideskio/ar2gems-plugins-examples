@@ -29,9 +29,12 @@ private :
 
   Geostat_grid* grid_;
   Grid_region* target_region_;
+  bool is_using_existing_prop_;
 
   Geostat_grid::location_type point_;
   std::string out_name_;
+
+  int nb_threads_;
 
 
 };

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Form</class>
+ <widget class="QWidget" name="Form">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>503</width>
+    <height>255</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <property name="AlgorithmCategory" stdset="0">
+   <string>DEMO</string>
+  </property>
+  <property name="AlgorithmDescription" stdset="0">
+   <string>Test with custom widget</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_3">
+   <item>
+    <widget class="QGroupBox" name="groupBox">
+     <property name="title">
+      <string>Grid and output property</string>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <item>
+       <widget class="GridSelector" name="Grid_Name"/>
+      </item>
+      <item>
+       <widget class="Output_property_selector" name="Output_name"/>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="groupBox_2">
+     <property name="title">
+      <string>Location to compute distance</string>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_2">
+      <item>
+       <widget class="Location_widget" name="Point"/>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="Processor_selector" name="Nb_processors"/>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>Output_property_selector</class>
+   <extends>QWidget</extends>
+   <header>qtplugins/output_selectors.h</header>
+  </customwidget>
+  <customwidget>
+   <class>GridSelector</class>
+   <extends>QWidget</extends>
+   <header>qtplugins/selectors.h</header>
+  </customwidget>
+  <customwidget>
+   <class>Processor_selector</class>
+   <extends>QWidget</extends>
+   <header>qtplugins/processor_selectors.h</header>
+  </customwidget>
+  <customwidget>
+   <class>Location_widget</class>
+   <extends>QWidget</extends>
+   <header>Location_widget.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

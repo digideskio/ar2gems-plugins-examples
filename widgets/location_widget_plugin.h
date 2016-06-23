@@ -26,11 +26,11 @@ public:
 
   bool isInitialized() const { return _initialized; }
   QWidget * createWidget(QWidget * parent);
-  QString name() const { return QLatin1String("LocationWidgetInterface"); }
+  QString name() const { return QLatin1String("Location_widget"); }
   QString group() const { return QLatin1String("My Widgets"); }
   QString toolTip() const { return QLatin1String("Location_widget"); }
   QString includeFile() const { return "Location_widget.h"; }
-  QString whatsThis() const { return "Widget defining a 3d locations"; }
+  QString whatsThis() const { return "Widget defining a 3d location"; }
   QIcon icon() const;
   bool isContainer() const { return false; }
 

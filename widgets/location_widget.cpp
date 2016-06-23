@@ -9,15 +9,27 @@ Location_widget::Location_widget(QWidget *parent)
   y_ = new QDoubleSpinBox(this);
   z_ = new QDoubleSpinBox(this);
 
+  x_->setMinimum(-9e20);
+  x_->setMaximum(9e20);
+  y_->setMinimum(-9e20);
+  y_->setMaximum(9e20);
+  z_->setMinimum(-9e20);
+  z_->setMaximum(9e20);
+
+  x_->setSingleStep(10);
+  y_->setSingleStep(10);
+  z_->setSingleStep(10);
+
   QHBoxLayout* layout = new QHBoxLayout(this);
 
   layout->addWidget(new QLabel("X", this));
   layout->addWidget(x_);
-  layout->addWidget(new QLabel("X", this));
+  layout->addWidget(new QLabel("Y", this));
   layout->addWidget(y_);
   layout->addWidget(new QLabel("Z", this));
   layout->addWidget(z_);
 
+  this->setLayout(layout);
 
 }
 
