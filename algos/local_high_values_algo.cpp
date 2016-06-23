@@ -34,7 +34,7 @@ bool Local_high_values::initialize( const Parameters_handler* parameters,
 	errors->report( grid_name.empty(),
 		  "Data_selector", "No grid selected" );
 
-  std::string input_prop = parameters->value( "Data_selector.prop" );
+  std::string input_prop = parameters->value( "Data_selector.property" );
   errors->report( input_prop.empty(),
 		  "Data_selector", "No property name specified" );
 
@@ -42,13 +42,19 @@ bool Local_high_values::initialize( const Parameters_handler* parameters,
 	errors->report( out_name_.empty(),
 		  "output", "No property name specified" );
 
+
   grid_ = grid_utilities::get_grid_from_manager(grid_name);
   errors->report(grid_ == 0, "Grid_Name", "Grid does not exist" );
-
+  
   if(!errors->empty()) {
     return false;
   }
 
+  prop_ = grid_->property(input_prop);
+  if(prop_ == 0) {
+	  errors->report( "Data_selector", "Property does not exist" );
+	  return false;
+  }
   region_ = grid_->region( parameters->value( "Data_selector.region" ));
 
   GsTLTriplet ranges;
