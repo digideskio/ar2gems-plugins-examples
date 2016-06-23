@@ -59,7 +59,7 @@ bool Multiply_property::init( std::string& parameters, GsTL_project* proj,
 }
 
 
-bool Multiply_property::exec(){
+bool Multiply_property::exec(Progress_notifier* notifier){
 
   for(int i=0; i<props_[0]->size(); ++i) {
     float prod = 1.0;

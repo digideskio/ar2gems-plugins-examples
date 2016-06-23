@@ -5,7 +5,6 @@
 
 #include "common.h"
 
-#include <common.h>
 #include <appli/action.h> 
 #include <grid/grid_property.h>
 #include <grid/geostat_grid.h>
@@ -21,9 +20,12 @@ public:
   virtual ~Multiply_property() {} 
   virtual bool init( std::string& parameters, GsTL_project* proj,
                      Error_messages_handler* errors ); 
-  virtual bool exec(); 
+  virtual bool exec(Progress_notifier* notifier);
 
 private :
+  virtual bool init( std::string& parameters, GsTL_project* proj,
+                     Error_messages_handler* errors, Progress_notifier* notifier) {}
+
   Geostat_grid* grid_;
   std::vector<Grid_continuous_property*> props_;
   Grid_continuous_property* product_prop_;

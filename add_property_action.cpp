@@ -59,7 +59,7 @@ bool Add_property::init( std::string& parameters, GsTL_project* proj,
 }
 
 
-bool Add_property::exec(){
+bool Add_property::exec(Progress_notifier* notifier){
 
   for(int i=0; i<props_[0]->size(); ++i) {
     float sum = 0.0;
