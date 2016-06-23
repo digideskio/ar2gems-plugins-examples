@@ -18,17 +18,14 @@ public:
 	virtual ~Local_high_values();
 
 	  virtual bool initialize( const Parameters_handler* parameters,
-				   Error_messages_handler* errors );
-	  virtual int execute( GsTL_project* proj=0 );
+      Error_messages_handler* errors, Progress_notifier* notifier);
+    virtual int execute(GsTL_project* proj, Progress_notifier* notifier);
 	  virtual std::string name() const { return "local_high_values"; }
 
 	 public:
 	  static Named_interface* create_new_interface( std::string& );
 
 private :
-      virtual bool initialize( const Parameters_handler* parameters,
-                   Error_messages_handler* errors, Progress_notifier* notifier) {}
-      virtual int execute( GsTL_project* proj, Progress_notifier* notifier) {}
 
   float threshold_;
   Grid_continuous_property* prop_;

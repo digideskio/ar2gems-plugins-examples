@@ -42,7 +42,7 @@
 #include <QRadioButton>
 
 
-class PLUGIN_DEMOS_DECL Pie_chart_creator : public Chart_creator 
+class EDA_DEMO_DECL Pie_chart_creator : public Chart_creator 
 {
   Q_OBJECT
 
@@ -67,7 +67,7 @@ private :
 
 };
 
-class PLUGIN_DEMOS_DECL Pie_chart_creator_factory : public Chart_creator_factory 
+class EDA_DEMO_DECL Pie_chart_creator_factory : public Chart_creator_factory
 {
 
 public:

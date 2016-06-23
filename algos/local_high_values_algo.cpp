@@ -28,7 +28,7 @@ Named_interface* Local_high_values::create_new_interface( std::string& ) {
 }
 
 bool Local_high_values::initialize( const Parameters_handler* parameters,
-			   Error_messages_handler* errors ) {
+  Error_messages_handler* errors, Progress_notifier* notifier) {
 
 	std::string grid_name = parameters->value( "Data_selector.grid" );
 	errors->report( grid_name.empty(),
@@ -42,7 +42,7 @@ bool Local_high_values::initialize( const Parameters_handler* parameters,
 	errors->report( out_name_.empty(),
 		  "output", "No property name specified" );
 
-  grid_ = get_grid_from_manager( grid_name );
+  grid_ = grid_utilities::get_grid_from_manager(grid_name);
   errors->report(grid_ == 0, "Grid_Name", "Grid does not exist" );
 
   if(!errors->empty()) {
@@ -68,11 +68,10 @@ bool Local_high_values::initialize( const Parameters_handler* parameters,
 
 }
 
-int Local_high_values::execute( GsTL_project* proj ){
+int Local_high_values::execute(GsTL_project* proj, Progress_notifier* notifier){
 
-  Grid_continuous_property* count_prop = geostat_utils::add_property_to_grid(grid_, out_name_ );
+  Grid_continuous_property* count_prop = grid_utilities::add_property_to_grid(grid_, out_name_);
 
-  grid_->select_property( prop_->name() );
   neigh_->select_property( prop_->name() );
 
   int grid_size = grid_->size();

@@ -7,20 +7,11 @@
 #include <charts/chart_widget.h>
 #include <charts/chart_display_control.h>
 #include <grid/grid_property.h>
-#include <grid/grid_weight_property.h>
 #include <grid/grid_filter.h>
-
-#include <vtkQtTableView.h>
-#include <vtkSmartPointer.h>
-#include <vtkLookupTable.h>
 #include <vtkChartPie.h>
-
-#include <QModelIndex>
-#include <QLabel>
-
 #include <vector>
 
-class PLUGIN_DEMOS_DECL Categorical_property_pie_chart : public Chart_base
+class EDA_DEMO_DECL Categorical_property_pie_chart : public Chart_base
 {
     Q_OBJECT
 public:

@@ -10,7 +10,7 @@ Named_interface* Add_property::create_new_interface( std::string& ){
 
 // format gridName::NewNameSum::prop1::prop2[::prop3::propN]
 bool Add_property::init( std::string& parameters, GsTL_project* proj,
-                     Error_messages_handler* errors )
+  Error_messages_handler* errors, Progress_notifier *notifier)
 {
 
     std::vector< std::string > params = 
@@ -28,7 +28,7 @@ bool Add_property::init( std::string& parameters, GsTL_project* proj,
     return false;
   }
 
-  grid_ = get_grid_from_manager(grid_name);
+  grid_ = grid_utilities::get_grid_from_manager(grid_name);
   if(grid_ == 0) {
     errors->report( "The grid "+grid_name+" does not exist" );
     return false;

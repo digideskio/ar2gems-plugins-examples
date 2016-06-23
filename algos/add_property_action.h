@@ -1,7 +1,7 @@
 // DEMO
 
-#ifndef MULTIPLY_PROPERTY_ACTIONS_H_
-#define MULTIPLY_PROPERTY_ACTIONS_H_
+#ifndef ADD_PROPERTY_ACTIONS_H_
+#define ADD_PROPERTY_ACTIONS_H_
 
 #include "common.h"
 
@@ -11,24 +11,22 @@
 #include <utils/named_interface.h>
 
 
-class PLUGIN_DEMOS_DECL Multiply_property :  public Action {
+class PLUGIN_DEMOS_DECL Add_property :  public Action {
  
 public: 
 
   static Named_interface* create_new_interface( std::string& );
 
-  virtual ~Multiply_property() {} 
+  virtual ~Add_property() {} 
   virtual bool init( std::string& parameters, GsTL_project* proj,
-                     Error_messages_handler* errors ); 
+    Error_messages_handler* errors, Progress_notifier *notifier);
   virtual bool exec(Progress_notifier* notifier);
 
 private :
-  virtual bool init( std::string& parameters, GsTL_project* proj,
-                     Error_messages_handler* errors, Progress_notifier* notifier) {}
 
   Geostat_grid* grid_;
   std::vector<Grid_continuous_property*> props_;
-  Grid_continuous_property* product_prop_;
+  Grid_continuous_property* sum_prop_;
 
 };
 

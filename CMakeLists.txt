@@ -59,6 +59,15 @@ elseif (WIN32)
     set(AR2GEMS_BUILD_PATH "d:/workspace/ar2gems_build" CACHE TYPE STRING)
 endif (APPLE)
 
+
+if (MSVC)
+	  set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_DEBUG ${AR2GEMS_BUILD_PATH}/bin/Debug/plugins/Geostat )
+	  set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_RELEASE ${AR2GEMS_BUILD_PATH}/bin/Release/plugins/Geostat )
+	  set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG ${AR2GEMS_BUILD_PATH}/bin/Debug/plugins/Geostat )
+	  set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ${AR2GEMS_BUILD_PATH}/bin/Release/plugins/Geostat )	
+endif (MSVC)
+
+
 # SET RELEVANT VARS FOR PACKAGE
 if (ALLOW_BUILD_PACKAGE)
 	if (APPLE)
@@ -198,37 +207,27 @@ elseif(MSVC)
 endif()
 
 
-set(USE_QT5 1)
-if(USE_QT5)
-    ### Enabling Qt5 #####################################################
-    find_package(Qt5Core REQUIRED)
-    include_directories(${Qt5Core_INCLUDE_DIRS})
-    find_package(Qt5Gui REQUIRED)
-    include_directories(${Qt5Gui_INCLUDE_DIRS})
-    find_package(Qt5Xml REQUIRED)
-    include_directories(${Qt5Xml_INCLUDE_DIRS})
-    find_package(Qt5Svg REQUIRED)
-    include_directories(${Qt5Svg_INCLUDE_DIRS})
-    find_package(Qt5Designer REQUIRED)
-    include_directories(${Qt5Designer_INCLUDE_DIRS})
-    find_package(Qt5Widgets REQUIRED)
-    include_directories(${Qt5Widgets_INCLUDE_DIRS})
-    find_package(Qt5PrintSupport REQUIRED)
-    include_directories(${Qt5PrintSupport_INCLUDE_DIRS})
-    find_package(Qt5Multimedia REQUIRED)
-    include_directories(${Qt5Multimedia_INCLUDE_DIRS})
-    find_package(Qt5UiTools REQUIRED)
-    include_directories(${Qt5UiTools_INCLUDE_DIRS})
 
-elseif()
-    #### Enabling Qt4 #####################################################
-    #find_package(Qt4 REQUIRED COMPONENTS
-                 #QtCore QtGui QtXml QtSvg QtDesigner QtUiTools)
-    #if(QT4_FOUND)
-      #message(STATUS "Qt4 found in ${QT_INCLUDE_DIR}")
-      #include(${QT_USE_FILE})
-    #endif()
-endif()
+### Enabling Qt5 #####################################################
+find_package(Qt5Core REQUIRED)
+include_directories(${Qt5Core_INCLUDE_DIRS})
+find_package(Qt5Gui REQUIRED)
+include_directories(${Qt5Gui_INCLUDE_DIRS})
+find_package(Qt5Xml REQUIRED)
+include_directories(${Qt5Xml_INCLUDE_DIRS})
+find_package(Qt5Svg REQUIRED)
+include_directories(${Qt5Svg_INCLUDE_DIRS})
+find_package(Qt5Designer REQUIRED)
+include_directories(${Qt5Designer_INCLUDE_DIRS})
+find_package(Qt5Widgets REQUIRED)
+include_directories(${Qt5Widgets_INCLUDE_DIRS})
+find_package(Qt5PrintSupport REQUIRED)
+include_directories(${Qt5PrintSupport_INCLUDE_DIRS})
+find_package(Qt5Multimedia REQUIRED)
+include_directories(${Qt5Multimedia_INCLUDE_DIRS})
+find_package(Qt5UiTools REQUIRED)
+include_directories(${Qt5UiTools_INCLUDE_DIRS})
+
 
 ### Enabling VTK #####################################################
 #find_package(VTK REQUIRED)
@@ -239,7 +238,6 @@ find_package(VTK COMPONENTS REQUIRED
   vtkRenderingOpenGL
   vtkInteractionStyle
   vtkChartsCore
-  vtkRenderingFreeTypeOpenGL
   vtkIOXML  
   vtkRenderingQt
   vtkGUISupportQt
@@ -261,104 +259,9 @@ if(PYTHONLIBS_FOUND)
 endif()
 
 
-# Process all headers with Q_OBJECT
-QT5_WRAP_CPP(${PROJECT_NAME}_MOC
-  pie_chart_creator.h
-  pie_chart.h
-)
+add_subdirectory(algos)
+add_subdirectory(widgets)
+add_subdirectory(widget-accessors)
+add_subdirectory(eda)
 
-## File to compile
-add_library(${PROJECT_NAME} SHARED
-  add_property_action.cpp
-  add_property_action.h
-  multiply_property_action.cpp
-  multiply_property_action.h
-  pie_chart_creator.cpp
-  pie_chart_creator.h
-  pie_chart.cpp
-  pie_chart.h
-  local_high_values_algo.cpp
-  local_high_values_algo.h
-  library_init.cpp
-  common.h
-  ${${PROJECT_NAME}_MOC}
-#  ${${PROJECT_NAME}_FORMS}
-)
-
-target_link_libraries(${PROJECT_NAME}
-    ${AR2GEMS_LIBRARIES}
-    #${QT_LIBRARIES}
-    ${Qt5Core_LIBRARIES}
-    ${Qt5Gui_LIBRARIES}
-    ${Qt5Gui_LIBRARIES}
-    ${Qt5Xml_LIBRARIES}
-    ${Qt5Svg_LIBRARIES}
-    ${Qt5Designer_LIBRARIES}
-    ${Qt5Widgets_LIBRARIES}
-    ${Qt5PrintSupport_LIBRARIES}
-    ${Qt5Multimedia_LIBRARIES}
-    ${Qt5UiTools_LIBRARIES}
-
-
-    ${VTK_LIBRARIES}
-)
-
-source_group(Qt FILES ${${PROJECT_NAME}_MOC} )
-
-if (WIN32)
-  add_definitions(-DPLUGINS_DEMO_EXPORT)
-endif()
-
-
-
-INSTALL(TARGETS ${PROJECT_NAME} DESTINATION "${INSTALL_LIB_DIR}")
-
-   
-# CREATE PACKAGE    
-if (ALLOW_BUILD_PACKAGE)
-    # COMMON    
-    SET(CPACK_DEBIAN_PACKAGE_MAINTAINER ${PACKAGE_MAINTAINER})
-    
-    SET(CPACK_PACKAGE_DESCRIPTION_FILE ${PACKAGE_DESCRIPTION_FILE})
-    SET(CPACK_RESOURCE_FILE_LICENSE ${PACKAGE_LICENSE_FILE})
-    
-    SET(CPACK_PACKAGE_VERSION_MAJOR ${PACKAGE_VERSION_MAJOR})
-    SET(CPACK_PACKAGE_VERSION_MINOR ${PACKAGE_VERSION_MINOR})
-    SET(CPACK_PACKAGE_VERSION_PATCH ${PACKAGE_VERSION_PATCH})
-    
-    SET(CPACK_SYSTEM_NAME ${PACKAGE_SYSTEM_NAME})
-        	                          
-	if (APPLE)
-	    # ...
-	elseif (UNIX)
-	    # DEB SPECIFIC
-	    if (PACKAGE_TYPE STREQUAL "DEB")
-	        SET(CPACK_GENERATOR "DEB")
-	        SET(CPACK_DEBIAN_PACKAGE_SHLIBDEPS ON) # autogenerate dependency information (package d-shlibs should be installed)
-	        SET(CPACK_DEBIAN_PACKAGE_DEPENDS "ar2gems (>= 1.0.0)")
-	    endif (PACKAGE_TYPE STREQUAL "DEB")
-	    
-	    # RPM SPECIFIC
-	    if (PACKAGE_TYPE STREQUAL "RPM")
-	        SET(CPACK_GENERATOR "RPM")
-	    
-	    endif(PACKAGE_TYPE STREQUAL "RPM")
-	              
-	elseif (WIN32)
-		set(CPACK_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
-	    set(CPACK_GENERATOR "NSIS")
-	    
-		set(CPACK_PACKAGE_FILE_NAME ${PROJECT_NAME})
-		set(CPACK_NSIS_INSTALLER_OUTFILE_NAME ${CPACK_PACKAGE_FILE_NAME})
-    	 
-        #pass NATIVE PATHS to NSIS template
-		string(REPLACE "/" "\\\\" WINNATIVE_PACKAGE_DIR ${PACKAGE_DIR})
-	    set(CPACK_NSIS_AR2GEMS_PLUGIN_BINARY_DIR ${WINNATIVE_PACKAGE_DIR})
-            
-	endif (APPLE)
-    
-    INCLUDE(CPack)
-        	
-endif (ALLOW_BUILD_PACKAGE)
-  
   
