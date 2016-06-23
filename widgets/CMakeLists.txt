@@ -10,6 +10,7 @@ project(${PROJECT_NAME})
 # Process all headers with Q_OBJECT
 QT5_WRAP_CPP(${PROJECT_NAME}_MOC
   location_widget.h
+  location_widget_plugin.h
 )
 
 ## File to compile
@@ -20,7 +21,6 @@ add_library(${PROJECT_NAME} SHARED
   location_widget_plugin.cpp
   common.h
   ${${PROJECT_NAME}_MOC}
-#  ${${PROJECT_NAME}_FORMS}
 )
 
 target_link_libraries(${PROJECT_NAME}

@@ -13,7 +13,8 @@ class QDesignerFormEditorInterface;
 class LocationWidgetPlugin : public QObject, public QDesignerCustomWidgetInterface
 {
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID "demo.myplugin" FILE "myplugin.QDesignerCustomWidgetInterface.json")
+    //Q_PLUGIN_METADATA(IID "demo.myplugin" FILE "QDesignerCustomWidgetInterface.json")
+    Q_PLUGIN_METADATA(IID "demo.myplugin")
     Q_INTERFACES(QDesignerCustomWidgetInterface)
     //Q_PLUGIN_METADATA(IID "mydemoplugin.QDesignerCustomWidgetInterface" FILE "QDesignerCustomWidgetInterface.json")
     
@@ -22,11 +23,7 @@ public:
   explicit LocationWidgetPlugin(QObject * o) : QObject(o) { _initialized = false; }
   LocationWidgetPlugin() { _initialized = false; }
   void initialize(QDesignerFormEditorInterface *) Q_DECL_OVERRIDE;
-//  {
-//    if (_initialized)
-//      return;
-//    _initialized = true;
-//  }
+
   bool isInitialized() const { return _initialized; }
   QWidget * createWidget(QWidget * parent);
   QString name() const { return QLatin1String("LocationWidgetInterface"); }
