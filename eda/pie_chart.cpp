@@ -173,12 +173,8 @@ void Categorical_property_pie_chart::build_plot()
   chart_widget_->chart()->GetAxis(vtkAxis::BOTTOM)->GetLabelProperties()->SetJustification(VTK_TEXT_RIGHT);
 
   chart_widget_->chart()->GetAxis(vtkAxis::LEFT)->SetMinimumLimit( 0 );
-  chart_widget_->chart()->GetAxis(vtkAxis::LEFT)->SetTitle(table_->GetColumnName(0));
-
-  chart_widget_->chart()->GetAxis(vtkAxis::RIGHT)->SetTitle(table_->GetColumnName(1));
-  chart_widget_->chart()->GetAxis(vtkAxis::RIGHT)->SetMaximumLimit( 1 );
-
-
+  chart_widget_->chart()->GetAxis(vtkAxis::LEFT)->SetTitle(table_->GetColumnName(2));
+  chart_widget_->chart()->GetAxis(vtkAxis::LEFT)->SetMaximumLimit(1);
 
   
   vtkPlotPie* plot_pie = vtkPlotPie::SafeDownCast(pie_chart_->AddPlot(0));
@@ -194,7 +190,7 @@ void Categorical_property_pie_chart::build_plot()
    const CategoricalPropertyDefinition* cdef = cat_prop_->get_category_definition();
    for(int i=0; i<ncat; ++i) {
      Color color = cdef->color_from_index(i);
-     vtkColor3ub vtk_color( color.redF(), color.greenF(), color.blueF() );
+     vtkColor3ub vtk_color(color.redF() * 255, color.greenF() * 255, color.blueF() * 255);
      color_series->AddColor(vtk_color);
    }
 
