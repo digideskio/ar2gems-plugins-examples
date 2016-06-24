@@ -10,28 +10,6 @@
 #include <QDomDocument>
 
 
-//=====================================
-
-Named_interface* Location_widget_accessor::create_new_interface(std::string&) {
-  return new Location_widget_accessor(0);
-}
-
-
-Location_widget_accessor::Location_widget_accessor(QWidget* widget)
-  : widget_(qobject_cast<Location_widget*>(widget)) {}
-
-
-
-bool Location_widget_accessor::initialize(QWidget* widget) {
-
-  widget_ = qobject_cast<Location_widget*>(widget);
-  if (widget_ == 0)
-    return false;
-
-  return true;
-}
-
-
 
 std::string Location_widget_accessor::value() const {
   std::string widget_name = xml_node_name(widget_).toStdString();

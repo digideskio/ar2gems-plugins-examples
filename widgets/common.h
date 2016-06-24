@@ -1,7 +1,7 @@
 // DEMO
 
-#ifndef PLUGINS_DEMO_COMMON_H_
-#define PLUGINS_DEMO_COMMON_H_
+#ifndef WIDGET_DEMO_COMMON_H_
+#define WIDGET_DEMO_COMMON_H_
 
 #if defined(_WIN32) || defined(WIN32)
   #ifdef LIB_STATIC
